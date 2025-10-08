@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 export default function Register({ navigation }) {
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
+        first_name: '',
+        last_name: '',
         email: '',
         gender: '',
         password: ''
@@ -18,14 +18,14 @@ export default function Register({ navigation }) {
             <TextInput
                 style={styles.input}
                 placeholder="First Name"
-                value={formData.firstname}
-                onChangeText={(text) => setFormData({ ...formData, firstname: text })}
+                value={formData.first_name}
+                onChangeText={(text) => setFormData({ ...formData, first_name: text })}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Last Name"
-                value={formData.lastname}
-                onChangeText={(text) => setFormData({ ...formData, lastname: text })}
+                value={formData.last_name}
+                onChangeText={(text) => setFormData({ ...formData, last_name: text })}
             />
             <TextInput
                 style={styles.input}

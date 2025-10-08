@@ -6,7 +6,7 @@ export default function ReviewPage({ route, navigation }) {
     const { formData } = route.params;
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('https://127.0.0.1:8000/registration/api/register/', formData);
+            const response = await axios.post('http://192.168.30.112:8000/registration/api/register/', formData);
             if (response.status === 200) {
                 console.log('Form submitted successfully');
             }
@@ -20,8 +20,8 @@ export default function ReviewPage({ route, navigation }) {
 
         <View style={style.container}>
             <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' }}>Review Your Information</Text>
-            <Text>First Name: {formData.firstname}</Text>
-            <Text>Last Name: {formData.lastname}</Text>
+            <Text>First Name: {formData.first_name}</Text>
+            <Text>Last Name: {formData.last_name}</Text>
             <Text>Email: {formData.email}</Text>
             <Text>Gender: {formData.gender}</Text>
 
