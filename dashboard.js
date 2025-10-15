@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Homepage from './pages/Homepage';
 import Register from './pages/Register';
 import ReviewPage from './pages/ReviewPage';
+import UserListPage from './pages/UserListPage';
 
 
 const Stack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ export default function Dashboard() {
                 <Stack.Screen name="Home" component={Homepage} />
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="ReviewPage" component={ReviewPage} />
+                <Stack.Screen name="UserListPage" component={UserListPage} />
             </Stack.Navigator>
         </NavigationContainer>
     );
