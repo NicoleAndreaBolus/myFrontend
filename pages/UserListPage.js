@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
 export default function UserListPage() {
@@ -28,6 +28,35 @@ export default function UserListPage() {
         );
     }
 
+    const handleDelete = (id) => {
+        Alert.alert(
+            "Confirm Delete",
+            "Are you sure you want to delete this user?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    style: "destructive",
+                    onPress: () => {
+                        axios
+                            .delete(`http://192.168.30.112:8000/registration/api/users/${id}/`)
+                            .then((res) => {
+                                setUsers(users.filter((user) => user.id !== id));
+                                Alert.alert("User deleted successfully");
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                Alert.alert("Failed to delete user");
+                            });
+                    }
+                }
+            ]
+        );
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>View All Users</Text>
@@ -46,7 +75,9 @@ export default function UserListPage() {
                             <TouchableOpacity style={styles.editButton}>
                                 <Text style={styles.buttonText}>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.deleteButton}>
+                            <TouchableOpacity
+                                style={styles.deleteButton}
+                                onPress={() => handleDelete(item.id)}>
                                 <Text style={styles.buttonText}>Delete</Text>
                             </TouchableOpacity>
                         </View>
