@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
-export default function UserListPage() {
+export default function UserListPage({ navigation }) {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    const fetchUsers = () => {
+        setLoading(true);
         axios
             .get('http://192.168.30.112:8000/registration/api/users/')
             .then((res) => {
@@ -17,16 +18,16 @@ export default function UserListPage() {
                 console.error(error);
                 setLoading(false);
             });
-    }, []);
+    };
 
-    if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#2fb846" />
-                <Text style={styles.loadingText}>Loading...</Text>
-            </View>
-        );
-    }
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchUsers(); // Fetch user list whenever the screen is focused
+        });
+        fetchUsers(); // Initial fetch
+
+        return unsubscribe;
+    }, [navigation]);
 
     const handleDelete = (id) => {
         Alert.alert(
@@ -43,7 +44,7 @@ export default function UserListPage() {
                     onPress: () => {
                         axios
                             .delete(`http://192.168.30.112:8000/registration/api/users/${id}/`)
-                            .then((res) => {
+                            .then(() => {
                                 setUsers(users.filter((user) => user.id !== id));
                                 Alert.alert("User deleted successfully");
                             })
@@ -56,6 +57,19 @@ export default function UserListPage() {
             ]
         );
     };
+
+    const handleEdit = (user) => {
+        navigation.navigate("EditUserPage", { user });
+    };
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#2fb846" />
+                <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -72,7 +86,8 @@ export default function UserListPage() {
                             <Text style={styles.gender}>{item.gender}</Text>
                         </View>
                         <View style={styles.buttonGroup}>
-                            <TouchableOpacity style={styles.editButton}>
+                            <TouchableOpacity style={styles.editButton}
+                                onPress={() => handleEdit(item)}>
                                 <Text style={styles.buttonText}>Edit</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -99,7 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: '#2fb846',
+        color: '#000000ff',
         alignSelf: 'center',
     },
     list: {
